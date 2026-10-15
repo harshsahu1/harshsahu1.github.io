@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["829B678AMR.harsh.Orbo"],
+        "components": [
+          { "/": "/orbo/*", "comment": "orbo share links: a split or loan sent from someone's orbo" }
+        ]
+      }
+    ]
+  }
+}

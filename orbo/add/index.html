@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Add to orbo</title>
+<style>
+  :root { --bg: #F2F2EF; --card: #FFFFFF; --ink: #111111; --muted: #6E6E6B; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0D0D0C; --card: #1A1A18; --ink: #F3F3F0; --muted: #94948E; } }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 -apple-system, system-ui, sans-serif; }
+  main { max-width: 420px; margin: 0 auto; padding: 48px 16px; }
+  .card { background: var(--card); border-radius: 26px; padding: 24px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .amount { font-size: 40px; font-weight: 600; margin: 12px 0 4px; font-variant-numeric: tabular-nums; }
+  p { color: var(--muted); margin: 0 0 16px; }
+  a.button { display: block; text-align: center; padding: 14px; border-radius: 999px; background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; }
+  .small { font-size: 13px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <h1 id="title">Add it to orbo</h1>
+    <div class="amount" id="amount" hidden></div>
+    <p id="detail">Someone sent you a split or a loan from their orbo.</p>
+    <a class="button" id="open" href="#">Open in orbo</a>
+    <p class="small">Nothing here is sent anywhere: the details are only in this link, and stay on your iPhone. Don't have orbo? Ask the person who sent this for it.</p>
+  </div>
+</main>
+<script>
+  // The details travel after the "#", which browsers never send to a server.
+  var params = new URLSearchParams(location.hash.slice(1));
+  if (params.get("id") && params.get("amt")) {
+    document.getElementById("open").href = "orbo://shared?" + params.toString();
+    var from = params.get("from") || "Someone";
+    var owe = params.get("dir") === "lent";
+    document.getElementById("title").textContent = owe ? from + " says you owe them" : "You lent " + from;
+    var amount = Number(params.get("amt"));
+    if (isFinite(amount)) {
+      var el = document.getElementById("amount");
+      el.textContent = "₹" + amount.toLocaleString("en-IN");
+      el.hidden = false;
+    }
+    var reason = params.get("for");
+    document.getElementById("detail").textContent = reason ? "For " + reason + "." : "Tap below to add it to Lent & borrowed.";
+  } else {
+    document.getElementById("open").href = "orbo://ledger";
+  }
+</script>
+</body>
+</html>
