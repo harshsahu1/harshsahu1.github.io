@@ -32,7 +32,8 @@
   // The details travel after the "#", which browsers never send to a server.
   var params = new URLSearchParams(location.hash.slice(1));
   if (params.get("id") && params.get("amt")) {
-    document.getElementById("open").href = "orbo://shared?" + params.toString();
+    // Passed on exactly as orbo encoded them (re-encoding would turn spaces into "+").
+    document.getElementById("open").href = "orbo://shared?" + location.hash.slice(1);
     var from = params.get("from") || "Someone";
     var owe = params.get("dir") === "lent";
     document.getElementById("title").textContent = owe ? from + " says you owe them" : "You lent " + from;
